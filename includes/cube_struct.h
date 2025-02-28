@@ -6,6 +6,17 @@ typedef struct	s_map
 	int	mapS;
 }				t_map;
 
+typedef struct	s_texture
+{
+	void	*tex;
+	int		width;
+	int		height;
+	char	*addr;
+	int		bpp;
+	int		line_lenght;
+	int		endian;
+}				t_texture;
+
 typedef struct	s_img
 {
 	void	*mlx;
@@ -14,6 +25,7 @@ typedef struct	s_img
 	char	*addr;
 	int		x;
 	int		y;
+	t_texture tex;
 	t_map	map;
 	int	bits_per_pixel;
 	int	line_lenght;

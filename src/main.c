@@ -346,6 +346,15 @@ int	key_control(t_cube *cube)
 	return (0);
 }
 
+t_texture init_tex(void	*mlx)
+{
+	t_texture tex;
+
+	tex.tex = mlx_xpm_file_to_image(mlx, "./north.xpm", &(tex.width), &(tex.height));
+	tex.addr = mlx_get_data_addr(tex.tex, &tex.bpp, &tex.line_lenght, &tex.endian);
+	return (tex);
+}
+
 t_img	*init_img()
 {
 	t_img	*img;
