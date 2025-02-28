@@ -150,11 +150,16 @@ static	double	ft_abs(double num)
 	return (num * -1);
 }
 
-static void	draw_vertical_line(t_cube *cube, int x, int start, int end, int color)
+static void	draw_vertical_line(t_cube *cube, int x, int start, int end, char *tex)
 {
+	int itr;
+
+	itr = 0;
 	while (start < end)
 	{
-		ft_put_pixel(cube->img, x, start, color);
+		//ft_put_pixel(cube->img, x, start, color);
+		cube->img->addr[start * cube->img->line_lenght + x * (cube->img->bits_per_pixel / 8)] = tex[itr * cube->img->line_lenght + x * (cube->img->bits_per_pixel / 8)];
+		itr++;
 		start++;
 	}
 }
@@ -233,43 +238,22 @@ int	put_cube(t_cube **cube)
 		else
 			perWallDist = (sideDistY - deltaDistY);
 		lineHeight = (int)(SCREEN_HEIGHT / perWallDist);
-		drawStart = (-lineHeight / 2) + (SCREEN_HEIGHT / 2);
+		drawStart = (-lineHeight / 2) + (SCREEN_HEIGHT / 2) + 100;
 		if (drawStart < 0)
 			drawStart = 0;
-		drawEnd = (lineHeight / 2) + (SCREEN_HEIGHT / 2);
+		drawEnd = (lineHeight / 2) + (SCREEN_HEIGHT / 2) + 100;
 		if (drawEnd >= SCREEN_HEIGHT)
 			drawEnd = SCREEN_HEIGHT - 1;
-		switch (worldMap[(*cube)->map.mapX][(*cube)->map.mapY])
-		{
-			case 1:
-			{
-				color =  0xff0000;
-				break ;
-			}
-			case 2:
-			{
-				color = 0x0fff00;
-				break ;
-			}
-			case 3:
-			{
-				color = 0x001bff;
-				break ;
-			}
-			case 4:
-			{
-				color = 0xffffff;
-				break ;
-			}
-			default:
-			{
-				color = 0xffec00;
-				break ;
-			}
-		}
-		if (side == 1)
-			color = color / 2;
-		draw_vertical_line((*cube), x, drawStart, drawEnd, color);
+		int texNum = worldMap[(*cube)->map.mapX][(*cube)->map.mapY] - 1;
+		double	wallX;
+		if (side == 0)
+			wallX = (*cube)->P->py + perWallDist * (*cube)->cam->rayDirY;
+		else
+			wallX = (*cube)->P->px + perWallDist * (*cube)->cam->rayDirX;
+		int texX = (int)(wallX * (*cube)->img->tex.width);
+		if (side == 0 && (*cube)->cam->rayDirX > 0) texX = (*cube)->img->tex.width - texX - 1;
+		if (side == 1 && (*cube)->cam->rayDirY > 0) texX = (*cube)->img->tex.width - texX - 1;
+		draw_vertical_line((*cube), x, drawStart, drawEnd, (*cube)->img->tex.addr);
 		x++;
 	}
 	mlx_put_image_to_window((*cube)->img->mlx, (*cube)->img->win, (*cube)->img->img, 0, 0);
