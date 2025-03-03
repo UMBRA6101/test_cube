@@ -238,22 +238,32 @@ int	put_cube(t_cube **cube)
 		else
 			perWallDist = (sideDistY - deltaDistY);
 		lineHeight = (int)(SCREEN_HEIGHT / perWallDist);
-		drawStart = (-lineHeight / 2) + (SCREEN_HEIGHT / 2) + 100;
+		drawStart = (-lineHeight / 2) + (SCREEN_HEIGHT / 2);
 		if (drawStart < 0)
 			drawStart = 0;
-		drawEnd = (lineHeight / 2) + (SCREEN_HEIGHT / 2) + 100;
+		drawEnd = (lineHeight / 2) + (SCREEN_HEIGHT / 2);
 		if (drawEnd >= SCREEN_HEIGHT)
 			drawEnd = SCREEN_HEIGHT - 1;
-		int texNum = worldMap[(*cube)->map.mapX][(*cube)->map.mapY] - 1;
+		//int texNum = worldMap[(*cube)->map.mapX][(*cube)->map.mapY] - 1;
 		double	wallX;
 		if (side == 0)
 			wallX = (*cube)->P->py + perWallDist * (*cube)->cam->rayDirY;
 		else
 			wallX = (*cube)->P->px + perWallDist * (*cube)->cam->rayDirX;
+		wallX -= floor(wallX);
 		int texX = (int)(wallX * (*cube)->img->tex.width);
 		if (side == 0 && (*cube)->cam->rayDirX > 0) texX = (*cube)->img->tex.width - texX - 1;
-		if (side == 1 && (*cube)->cam->rayDirY > 0) texX = (*cube)->img->tex.width - texX - 1;
-		draw_vertical_line((*cube), x, drawStart, drawEnd, (*cube)->img->tex.addr);
+		if (side == 1 && (*cube)->cam->rayDirY < 0) texX = (*cube)->img->tex.width - texX - 1;
+		double	step = 1.0 * (*cube)->img->tex.height / lineHeight;
+		double	texPos = (drawStart - SCREEN_HEIGHT / 2 + lineHeight / 2) * step;
+		for (int y = drawStart; y < drawEnd; y++)
+		{
+			int texY = (int)texPos & ((*cube)->img->tex.height - 1);
+			texPos += step;
+			color = (*cube)->img->tex.addr[((*cube)->img->tex.height * texY + texX)];
+			//if (side == 1) color = (color >> 1) & 8355711;
+			(*cube)->img->addr[y * (*cube)->img->line_lenght + x] = color;
+		}
 		x++;
 	}
 	mlx_put_image_to_window((*cube)->img->mlx, (*cube)->img->win, (*cube)->img->img, 0, 0);
@@ -348,6 +358,9 @@ t_img	*init_img()
 		return (NULL);
 	img->mlx = mlx_init();
 	img->win = mlx_new_window(img->mlx, SCREEN_WIDTH, SCREEN_HEIGHT, "cube3D");
+	img->tex = init_tex(img->mlx);
+	img->img = mlx_new_image(img->mlx, img->tex.width, img->tex.height);
+	img->addr = img->tex.addr;
 	return (img);
 }
 
@@ -407,6 +420,7 @@ int	main()
 {
 	t_cube	*cube;
 	cube = init_cube();
+	//mlx_put_image_to_window(cube->img->mlx, cube->img->win, cube->img->tex, 0, 0);
 	put_cube(&cube);
 	mlx_hook(cube->img->win, 02, 1L<<0, key_press, cube);
 	//key_control(cube);
