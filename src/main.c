@@ -183,9 +183,9 @@ int	put_cube(t_cube **cube)
 	int color;
 
 	x = 0;
-	ft_bzero((*cube)->img->addr, SCREEN_WIDTH * SCREEN_HEIGHT * ((*cube)->img->bits_per_pixel) / 8);
 	(*cube)->img->img = mlx_new_image((*cube)->img->mlx, SCREEN_WIDTH, SCREEN_HEIGHT);
 	(*cube)->img->addr = mlx_get_data_addr((*cube)->img->img, &((*cube)->img->bits_per_pixel), &((*cube)->img->line_lenght), &((*cube)->img->endian));
+	ft_bzero((*cube)->img->addr, SCREEN_WIDTH * SCREEN_HEIGHT * ((*cube)->img->bits_per_pixel) / 8);
 	while (x < SCREEN_WIDTH)
 	{
 		(*cube)->cam->cameraX = 2 * x / (double)SCREEN_WIDTH - 1;
@@ -254,17 +254,32 @@ int	put_cube(t_cube **cube)
 		int texX = (int)(wallX * (*cube)->img->tex.width);
 		if (side == 0 && (*cube)->cam->rayDirX > 0) texX = (*cube)->img->tex.width - texX - 1;
 		if (side == 1 && (*cube)->cam->rayDirY < 0) texX = (*cube)->img->tex.width - texX - 1;
-		double	step = 1.0 * (*cube)->img->tex.height / lineHeight;
+		double	step = 1.0 * (*cube)->img->tex.width / lineHeight;
 		double	texPos = (drawStart - SCREEN_HEIGHT / 2 + lineHeight / 2) * step;
 		for (int y = drawStart; y < drawEnd; y++)
 		{
-			int texY = (int)texPos & ((*cube)->img->tex.height - 1);
+			int texY = (int)texPos & ((*cube)->img->tex.width - 1);
 			texPos += step;
-			color = (*cube)->img->tex.addr[((*cube)->img->tex.height * texY + texX)];
-			//if (side == 1) color = (color >> 1) & 8355711;
-			(*cube)->img->addr[y * (*cube)->img->line_lenght + x] = color;
+			color = (*cube)->img->tex.addr[((*cube)->img->tex.width * texY + texX)];
+			if (side == 1) color = (color >> 1) & 8355711;
+			if (color > 0)
+				(*cube)->img->tex.texture_pixel[y][x] = color;
 		}
 		x++;
+	}
+	int	pixel;
+	for (int y = 0; y < SCREEN_HEIGHT; y++)
+	{
+		x = 0;
+		while (x < SCREEN_WIDTH)
+		{
+			if ((*cube)->img->tex.texture_pixel[y][x] > 0)
+			{
+				pixel = y * ((*cube)->img->line_lenght / 4) + x;
+				(*cube)->img->addr[pixel] = (*cube)->img->tex.texture_pixel[y][x];
+			}
+			x++;
+		}
 	}
 	mlx_put_image_to_window((*cube)->img->mlx, (*cube)->img->win, (*cube)->img->img, 0, 0);
 	return (0);
@@ -346,6 +361,14 @@ t_texture init_tex(void	*mlx)
 
 	tex.tex = mlx_xpm_file_to_image(mlx, "./north.xpm", &(tex.width), &(tex.height));
 	tex.addr = mlx_get_data_addr(tex.tex, &tex.bpp, &tex.line_lenght, &tex.endian);
+	tex.width = 64;
+	tex.texture_pixel = ft_calloc(SCREEN_HEIGHT + 1, sizeof(int *));
+	int	i = 0;
+	while (i < SCREEN_HEIGHT)
+	{
+		tex.texture_pixel[i] = ft_calloc(SCREEN_WIDTH + 1, sizeof(int *));
+		i++;
+	}
 	return (tex);
 }
 
@@ -420,7 +443,6 @@ int	main()
 {
 	t_cube	*cube;
 	cube = init_cube();
-	//mlx_put_image_to_window(cube->img->mlx, cube->img->win, cube->img->tex, 0, 0);
 	put_cube(&cube);
 	mlx_hook(cube->img->win, 02, 1L<<0, key_press, cube);
 	//key_control(cube);

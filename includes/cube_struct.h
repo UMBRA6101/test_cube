@@ -11,6 +11,7 @@ typedef struct	s_texture
 	void	*tex;
 	int		width;
 	int		height;
+	int		**texture_pixel;
 	char	*addr;
 	int		bpp;
 	int		line_lenght;

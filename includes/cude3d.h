@@ -11,7 +11,7 @@
 
 # define mapWidth 24
 # define mapHeight 24
-# define SCREEN_WIDTH 1024
-# define SCREEN_HEIGHT 512
+# define SCREEN_WIDTH 640
+# define SCREEN_HEIGHT 480
 
 #endif
