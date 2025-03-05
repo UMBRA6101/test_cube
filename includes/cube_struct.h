@@ -8,10 +8,9 @@ typedef struct	s_map
 
 typedef struct	s_texture
 {
-	void	*tex;
+	int	*tex;
 	int		width;
 	int		height;
-	int		**texture_pixel;
 	char	*addr;
 	int		bpp;
 	int		line_lenght;
@@ -20,19 +19,19 @@ typedef struct	s_texture
 
 typedef struct	s_img
 {
-	void	*mlx;
-	void	*win;
-	void	*img;
-	char	*addr;
-	int		x;
-	int		y;
-	t_texture tex;
-	t_map	map;
-	int	bits_per_pixel;
-	int	line_lenght;
-	int	endian;
-	double	time;
-	double	OldTime;
+	void		*mlx;
+	void		*win;
+	void		*img;
+	char		*addr;
+	int			x;
+	int			y;
+	int			endian;
+	int			line_lenght;
+	int			bits_per_pixel;
+	int			**texture_pixel;
+	t_texture 	*tex;
+	char		*tex_pix_addr;
+	t_map		map;
 }				t_img;
 
 typedef struct	s_camera
