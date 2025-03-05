@@ -14,30 +14,30 @@
 
 int worldMap[mapWidth][mapHeight]=
 		{
-				{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-				{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-				{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-				{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-				{1,0,0,0,0,0,2,2,2,2,2,0,0,0,0,3,0,3,0,3,0,0,0,1},
-				{1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,1},
-				{1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,3,0,0,0,3,0,0,0,1},
-				{1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,1},
-				{1,0,0,0,0,0,2,2,0,2,2,0,0,0,0,3,0,3,0,3,0,0,0,1},
-				{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-				{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-				{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-				{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-				{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-				{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-				{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-				{1,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-				{1,4,0,4,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-				{1,4,0,0,0,0,5,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-				{1,4,0,4,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-				{1,4,0,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-				{1,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-				{1,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-				{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
+				{4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,7,7,7,7,7,7,7,7},
+				{4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,7},
+				{4,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7},
+				{4,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7},
+				{4,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,7},
+				{4,0,4,0,0,0,0,5,5,5,5,5,5,5,5,5,7,7,0,7,7,7,7,7},
+				{4,0,5,0,0,0,0,5,0,5,0,5,0,5,0,5,7,0,0,0,7,7,7,1},
+				{4,0,6,0,0,0,0,5,0,0,0,0,0,0,0,5,7,0,0,0,0,0,0,8},
+				{4,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,7,7,1},
+				{4,0,8,0,0,0,0,5,0,0,0,0,0,0,0,5,7,0,0,0,0,0,0,8},
+				{4,0,0,0,0,0,0,5,0,0,0,0,0,0,0,5,7,0,0,0,7,7,7,1},
+				{4,0,0,0,0,0,0,5,5,5,5,0,5,5,5,5,7,7,7,7,7,7,7,1},
+				{6,6,6,6,6,6,6,6,6,6,6,0,6,6,6,6,6,6,6,6,6,6,6,6},
+				{8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4},
+				{6,6,6,6,6,6,0,6,6,6,6,0,6,6,6,6,6,6,6,6,6,6,6,6},
+				{4,4,4,4,4,4,0,4,4,4,6,0,6,2,2,2,2,2,2,2,3,3,3,3},
+				{4,0,0,0,0,0,0,0,0,4,6,0,6,2,0,0,0,0,0,2,0,0,0,2},
+				{4,0,0,0,0,0,0,0,0,0,0,0,6,2,0,0,5,0,0,2,0,0,0,2},
+				{4,0,0,0,0,0,0,0,0,4,6,0,6,2,0,0,0,0,0,2,2,0,2,2},
+				{4,0,6,0,6,0,0,0,0,4,6,0,0,0,0,0,5,0,0,0,0,0,0,2},
+				{4,0,0,5,0,0,0,0,0,4,6,0,6,2,0,0,0,0,0,2,2,0,2,2},
+				{4,0,6,0,6,0,0,0,0,4,6,0,6,2,0,0,5,0,0,2,0,0,0,2},
+				{4,0,0,0,0,0,0,0,0,4,6,0,6,2,0,0,0,0,0,2,0,0,0,2},
+				{4,4,4,4,4,4,4,4,4,4,1,1,1,2,2,2,2,2,2,3,3,3,3,3}
 		};
 
 void ft_put_pixel(t_img *img, int x, int y, int color);
@@ -185,12 +185,11 @@ int	put_cube(t_cube **cube)
 	x = 0;
 	(*cube)->img->img = mlx_new_image((*cube)->img->mlx, SCREEN_WIDTH, SCREEN_HEIGHT);
 	(*cube)->img->addr = mlx_get_data_addr((*cube)->img->img, &((*cube)->img->bits_per_pixel), &((*cube)->img->line_lenght), &((*cube)->img->endian));
-	ft_bzero((*cube)->img->addr, SCREEN_WIDTH * SCREEN_HEIGHT * ((*cube)->img->bits_per_pixel) / 8);
 	while (x < SCREEN_WIDTH)
 	{
 		(*cube)->cam->cameraX = 2 * x / (double)SCREEN_WIDTH - 1;
 		(*cube)->cam->rayDirX = (*cube)->P->dirX + (*cube)->cam->planeX * (*cube)->cam->cameraX;
-		(*cube)->cam->rayDirY = (*cube)->P->dirY + (*cube)->cam->planeY * (*cube)->cam->cameraY;
+		(*cube)->cam->rayDirY = (*cube)->P->dirY + (*cube)->cam->planeY * (*cube)->cam->cameraX;
 		(*cube)->map.mapX = (int)((*cube)->P->px);
 		(*cube)->map.mapY = (int)((*cube)->P->py);
 		deltaDistX = ((*cube)->cam->rayDirX == 0) ? 1e30 : ft_abs(1 / ((*cube)->cam->rayDirX));
@@ -238,10 +237,11 @@ int	put_cube(t_cube **cube)
 		else
 			perWallDist = (sideDistY - deltaDistY);
 		lineHeight = (int)(SCREEN_HEIGHT / perWallDist);
-		drawStart = (-lineHeight / 2) + (SCREEN_HEIGHT / 2);
+		int pitch = 0;
+		drawStart = -lineHeight / 2 + SCREEN_HEIGHT / 2 + pitch;
 		if (drawStart < 0)
 			drawStart = 0;
-		drawEnd = (lineHeight / 2) + (SCREEN_HEIGHT / 2);
+		drawEnd = lineHeight / 2 + SCREEN_HEIGHT / 2 + pitch;
 		if (drawEnd >= SCREEN_HEIGHT)
 			drawEnd = SCREEN_HEIGHT - 1;
 		//int texNum = worldMap[(*cube)->map.mapX][(*cube)->map.mapY] - 1;
@@ -251,23 +251,24 @@ int	put_cube(t_cube **cube)
 		else
 			wallX = (*cube)->P->px + perWallDist * (*cube)->cam->rayDirX;
 		wallX -= floor(wallX);
-		int texX = (int)(wallX * (*cube)->img->tex.width);
-		if (side == 0 && (*cube)->cam->rayDirX > 0) texX = (*cube)->img->tex.width - texX - 1;
-		if (side == 1 && (*cube)->cam->rayDirY < 0) texX = (*cube)->img->tex.width - texX - 1;
-		double	step = 1.0 * (*cube)->img->tex.width / lineHeight;
-		double	texPos = (drawStart - SCREEN_HEIGHT / 2 + lineHeight / 2) * step;
+		int texX = (int)(wallX * (*cube)->img->tex.line_lenght);
+		if (side == 0 && (*cube)->cam->rayDirX > 0) texX = (*cube)->img->tex.line_lenght - texX - 1;
+		if (side == 1 && (*cube)->cam->rayDirY < 0) texX = (*cube)->img->tex.line_lenght - texX - 1;
+		double	step = 1.0 * (*cube)->img->tex.height / lineHeight;
+		double	texPos = (drawStart - pitch - SCREEN_HEIGHT / 2 + lineHeight / 2) * step;
 		for (int y = drawStart; y < drawEnd; y++)
 		{
-			int texY = (int)texPos & ((*cube)->img->tex.width - 1);
+			int texY = (int)texPos & ((*cube)->img->tex.line_lenght - 1);
 			texPos += step;
-			color = (*cube)->img->tex.addr[((*cube)->img->tex.width * texY + texX)];
-			if (side == 1) color = (color >> 1) & 8355711;
+			color = (*cube)->img->tex.addr[((*cube)->img->tex.line_lenght * texY + texX)];
+			//if (side == 1) color = (color >> 1) & 8355711;
 			if (color > 0)
 				(*cube)->img->tex.texture_pixel[y][x] = color;
 		}
 		x++;
 	}
 	int	pixel;
+	ft_bzero((*cube)->img->addr, SCREEN_WIDTH * SCREEN_HEIGHT * ((*cube)->img->bits_per_pixel) / 8);
 	for (int y = 0; y < SCREEN_HEIGHT; y++)
 	{
 		x = 0;
@@ -275,11 +276,21 @@ int	put_cube(t_cube **cube)
 		{
 			if ((*cube)->img->tex.texture_pixel[y][x] > 0)
 			{
-				pixel = y * ((*cube)->img->line_lenght / 4) + x;
-				(*cube)->img->addr[pixel] = (*cube)->img->tex.texture_pixel[y][x];
+				/*pixel = y * ((*cube)->img->line_lenght /2) + x;
+				(*cube)->img->addr[pixel] = (*cube)->img->tex.texture_pixel[y][x];*/
+				ft_put_pixel((*cube)->img, x, y, (*cube)->img->tex.texture_pixel[y][x]);
 			}
+			/*else if (y < SCREEN_HEIGHT / 2)
+				ft_put_pixel((*cube)->img, x, y, 0xe400ff);
+			else if (y < SCREEN_HEIGHT - 1)
+				ft_put_pixel((*cube)->img, x, y, 0x00fff3);*/
 			x++;
 		}
+	}
+	for (int y = 0;y < SCREEN_HEIGHT; y++)
+	{
+		for (int z = 0; z < SCREEN_WIDTH; z++)
+			(*cube)->img->tex.texture_pixel[y][z] = 0;
 	}
 	mlx_put_image_to_window((*cube)->img->mlx, (*cube)->img->win, (*cube)->img->img, 0, 0);
 	return (0);
@@ -290,6 +301,8 @@ int	key_press(int key, void *param)
 	t_cube *cube;
 
 	cube = (t_cube *)param;
+	mlx_destroy_image(cube->img->mlx, cube->img->img);
+	mlx_clear_window(cube->img->mlx, cube->img->win);
 	if (key == 65307)
 		exit(0);
 	if (key == W_KEY)
@@ -342,8 +355,6 @@ int	key_press(int key, void *param)
 		cube->cam->planeX = cube->cam->planeX * cos(cube->P->speed_rotate) - cube->cam->planeY * sin(cube->P->speed_rotate);
 		cube->cam->planeY = OldPlaneX * sin(cube->P->speed_rotate) + cube->cam->planeY * cos(cube->P->speed_rotate);
 	}*/
-	//mlx_destroy_image(cube->img->mlx, cube->img->img);
-	//mlx_clear_window(cube->img->mlx, cube->img->win);
 	put_cube(&cube);
 	return 0;
 }
@@ -361,12 +372,11 @@ t_texture init_tex(void	*mlx)
 
 	tex.tex = mlx_xpm_file_to_image(mlx, "./north.xpm", &(tex.width), &(tex.height));
 	tex.addr = mlx_get_data_addr(tex.tex, &tex.bpp, &tex.line_lenght, &tex.endian);
-	tex.width = 64;
 	tex.texture_pixel = ft_calloc(SCREEN_HEIGHT + 1, sizeof(int *));
 	int	i = 0;
 	while (i < SCREEN_HEIGHT)
 	{
-		tex.texture_pixel[i] = ft_calloc(SCREEN_WIDTH + 1, sizeof(int *));
+		tex.texture_pixel[i] = ft_calloc(SCREEN_WIDTH + 1, sizeof(int));
 		i++;
 	}
 	return (tex);
@@ -382,7 +392,7 @@ t_img	*init_img()
 	img->mlx = mlx_init();
 	img->win = mlx_new_window(img->mlx, SCREEN_WIDTH, SCREEN_HEIGHT, "cube3D");
 	img->tex = init_tex(img->mlx);
-	img->img = mlx_new_image(img->mlx, img->tex.width, img->tex.height);
+	img->img = NULL;
 	img->addr = img->tex.addr;
 	return (img);
 }
