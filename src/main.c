@@ -12,7 +12,7 @@
 
 #include "cube3d.h"
 
-int worldMap[mapWidth][mapHeight]=
+/*int worldMap[mapWidth][mapHeight]=
 		{
 				{4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,7,7,7,7,7,7,7,7},
 				{4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,7},
@@ -38,9 +38,7 @@ int worldMap[mapWidth][mapHeight]=
 				{4,0,6,0,6,0,0,0,0,4,6,0,6,2,0,0,5,0,0,2,0,0,0,2},
 				{4,0,0,0,0,0,0,0,0,4,6,0,6,2,0,0,0,0,0,2,0,0,0,2},
 				{4,4,4,4,4,4,4,4,4,4,1,1,1,2,2,2,2,2,2,3,3,3,3,3}
-		};
-
-void ft_put_pixel(t_img *img, int x, int y, int color);
+		};*/
 
 int ft_max(int a, int b)
 {
@@ -134,7 +132,7 @@ void	print_map(t_img *img)
 
 
 
-static void	draw_vertical_line(t_cube *cube, int x, int start, int end, char *tex)
+/*static void	draw_vertical_line(t_cube *cube, int x, int start, int end, char *tex)
 {
 	int itr;
 
@@ -146,143 +144,9 @@ static void	draw_vertical_line(t_cube *cube, int x, int start, int end, char *te
 		itr++;
 		start++;
 	}
-}
+}*/
 
-int	put_cube(t_cube **cube)
-{
-	int x;
-	double	sideDistX;
-	double	sideDistY;
-	double	deltaDistX;
-	double	deltaDistY;
-	double	perWallDist;
-	int StepX;
-	int StepY;
-	int hit;
-	int side;
-	int lineHeight;
-	int drawStart;
-	int drawEnd;
-	unsigned int	color;
-
-	x = 0;
-	(*cube)->img->img = mlx_new_image((*cube)->img->mlx, SCREEN_WIDTH, SCREEN_HEIGHT);
-	(*cube)->img->addr = mlx_get_data_addr((*cube)->img->img, &((*cube)->img->bits_per_pixel),
-		&((*cube)->img->line_lenght), &((*cube)->img->endian));
-	while (x < SCREEN_WIDTH)
-	{
-		(*cube)->cam->cameraX = 2 * x / (double)SCREEN_WIDTH - 1;
-		(*cube)->cam->rayDirX = (*cube)->P->dirX + (*cube)->cam->planeX * (*cube)->cam->cameraX;
-		(*cube)->cam->rayDirY = (*cube)->P->dirY + (*cube)->cam->planeY * (*cube)->cam->cameraX;
-		(*cube)->map.mapX = (int)((*cube)->P->px);
-		(*cube)->map.mapY = (int)((*cube)->P->py);
-		deltaDistX = ((*cube)->cam->rayDirX == 0) ? 1e30 : fabs(1 / ((*cube)->cam->rayDirX));
-		deltaDistY = ((*cube)->cam->rayDirY == 0) ? 1e30 : fabs(1 / ((*cube)->cam->rayDirY));
-		hit = 0;
-		if ((*cube)->cam->rayDirX < 0)
-		{
-			StepX = -1;
-			sideDistX = ((*cube)->P->px - (*cube)->map.mapX) * deltaDistX;
-		}
-		else
-		{
-			StepX = 1;
-			sideDistX = ((*cube)->map.mapX + 1 - (*cube)->P->px) * deltaDistX;
-		}
-		if ((*cube)->cam->rayDirY < 0)
-		{
-			StepY = -1;
-			sideDistY = ((*cube)->P->py - (*cube)->map.mapY) * deltaDistY;
-		}
-		else
-		{
-			StepY = 1;
-			sideDistY = ((*cube)->map.mapY + 1 - (*cube)->P->py) * deltaDistY;
-		}
-		while (hit == 0)
-		{
-			if (sideDistX < sideDistY)
-			{
-				sideDistX += deltaDistX;
-				(*cube)->map.mapX += StepX;
-				side = 0;
-			}
-			else
-			{
-				sideDistY += deltaDistY;
-				(*cube)->map.mapY += StepY;
-				side = 1;
-			}
-			if (worldMap[(*cube)->map.mapX][(*cube)->map.mapY] > 0)
-				hit = 1;
-		}
-		if (side == 0)
-			perWallDist = (sideDistX - deltaDistX);
-		else
-			perWallDist = (sideDistY - deltaDistY);
-		lineHeight = (int)(SCREEN_HEIGHT / perWallDist);
-		int pitch = 0;
-		drawStart = -lineHeight / 2 + SCREEN_HEIGHT / 2 + pitch;
-		if (drawStart < 0)
-			drawStart = 0;
-		drawEnd = lineHeight / 2 + SCREEN_HEIGHT / 2 + pitch;
-		if (drawEnd >= SCREEN_HEIGHT)
-			drawEnd = SCREEN_HEIGHT - 1;
-		int texNum = worldMap[(*cube)->map.mapX][(*cube)->map.mapY] - 1;
-		if (texNum > 3)
-			texNum = 3;
-		double	wallX;
-		if (side == 0)
-			wallX = (*cube)->P->py + perWallDist * (*cube)->cam->rayDirY;
-		else
-			wallX = (*cube)->P->px + perWallDist * (*cube)->cam->rayDirX;
-		wallX -= floor(wallX);
-		int texX = (int)(wallX * (*cube)->img->tex[side].line_lenght);
-		if (side == 0 && (*cube)->cam->rayDirX > 0) texX = (*cube)->img->tex[side].line_lenght - texX - 1;
-		if (side == 1 && (*cube)->cam->rayDirY < 0) texX = (*cube)->img->tex[side].line_lenght - texX - 1;
-		double	step = 1.0 * (*cube)->img->tex[side].height / lineHeight;
-		double	texPos = (drawStart - pitch - SCREEN_HEIGHT / 2 + lineHeight / 2) * step;
-		for (int y = drawStart; y < drawEnd; y++)
-		{
-			int texY = (int)texPos & ((*cube)->img->tex[side].line_lenght - 1);
-			texPos += step;
-			//color = (*cube)->img->tex[side].addr[((*cube)->img->tex[side].line_lenght * texY + texX)];
-			color = (unsigned int)(*cube)->img->tex[side].addr[((*cube)->img->tex[side].line_lenght * texY + texX)];
-			//if (side == 1) color = (color >> 1) & 8355711;
-			if (color > 0)
-				(*cube)->img->texture_pixel[y][x] = color;
-		}
-		x++;
-	}
-	//ft_bzero((*cube)->img->addr, SCREEN_WIDTH * SCREEN_HEIGHT * ((*cube)->img->bits_per_pixel) / 8);
-	for (int y = 0; y < SCREEN_HEIGHT; y++)
-	{
-		x = 0;
-		while (x < SCREEN_WIDTH)
-		{
-			if ((*cube)->img->texture_pixel[y][x] > 0)
-			{
-				/*pixel = y * ((*cube)->img->line_lenght /2) + x;
-				(*cube)->img->addr[pixel] = (*cube)->img->tex.texture_pixel[y][x];*/
-				ft_put_pixel((*cube)->img, x, y, (*cube)->img->texture_pixel[y][x]);
-			}
-			/*else if (y < SCREEN_HEIGHT / 2)
-				ft_put_pixel((*cube)->img, x, y, 0xe400ff);
-			else if (y < SCREEN_HEIGHT - 1)
-				ft_put_pixel((*cube)->img, x, y, 0x00fff3);*/
-			x++;
-		}
-	}
-	for (int y = 0;y < SCREEN_HEIGHT; y++)
-	{
-		for (int z = 0; z < SCREEN_WIDTH; z++)
-			(*cube)->img->texture_pixel[y][z] = 0;
-	}
-	mlx_put_image_to_window((*cube)->img->mlx, (*cube)->img->win, (*cube)->img->img, 0, 0);
-	return (0);
-}
-
-int	key_press(int key, void *param)
+/*int	key_press(int key, void *param)
 {
 	t_cube *cube;
 
@@ -293,17 +157,17 @@ int	key_press(int key, void *param)
 		exit(0);
 	if (key == W_KEY)
 	{
-		if (worldMap[(int)(cube->P->px + cube->P->dirX * cube->P->speed_moove)][(int)(cube->P->py)] == 0)
-			cube->P->px += cube->P->dirX * cube->P->speed_moove;
-		if (worldMap[(int)(cube->P->px)][(int)(cube->P->py + cube->P->dirY * 1)] == 0)
-			cube->P->py += cube->P->dirY * cube->P->speed_moove;
+		if (cube->map->map[(int)(cube->P->px + cube->P->dirX * cube->P->speed_move)][(int)(cube->P->py)] == 0)
+			cube->P->px += cube->P->dirX * cube->P->speed_move;
+		if (cube->map->map[(int)(cube->P->px)][(int)(cube->P->py + cube->P->dirY * 1)] == 0)
+			cube->P->py += cube->P->dirY * cube->P->speed_move;
 	}
 	else if (key == S_KEY)
 	{
-		if (worldMap[(int)(cube->P->px - cube->P->dirX * cube->P->speed_moove)][(int)(cube->P->py)] == 0)
-			cube->P->px -= cube->P->dirX * cube->P->speed_moove;
-		if (worldMap[(int)(cube->P->px)][(int)(cube->P->py - cube->P->dirY * cube->P->speed_moove)] == 0)
-			cube->P->py -= cube->P->dirY * cube->P->speed_moove;
+		if (cube->map->map[(int)(cube->P->px - cube->P->dirX * cube->P->speed_move)][(int)(cube->P->py)] == 0)
+			cube->P->px -= cube->P->dirX * cube->P->speed_move;
+		if (cube->map->map[(int)(cube->P->px)][(int)(cube->P->py - cube->P->dirY * cube->P->speed_move)] == 0)
+			cube->P->py -= cube->P->dirY * cube->P->speed_move;
 	}
 	else if (key == A_KEY)
 	{
@@ -323,29 +187,90 @@ int	key_press(int key, void *param)
 		cube->cam->planeX = cube->cam->planeX * cos(-cube->P->speed_rotate) - cube->cam->planeY * sin(-cube->P->speed_rotate);
 		cube->cam->planeY = oldPlaneX * sin(-cube->P->speed_rotate) + cube->cam->planeY * cos(-cube->P->speed_rotate);
 	}
-	put_cube(&cube);
+	put_wall(&cube);
 	return 0;
+}*/
+
+void	set_parm(t_cube *cube)
+{
+	if (cube->tab_key[W_KEY] == 1)
+	{
+		if (cube->map->map[(int)(cube->P->px + cube->P->dirX * cube->P->speed_move)][(int)(cube->P->py)] == 0)
+			cube->P->px += cube->P->dirX * cube->P->speed_move;
+		if (cube->map->map[(int)(cube->P->px)][(int)(cube->P->py + cube->P->dirY * 1)] == 0)
+			cube->P->py += cube->P->dirY * cube->P->speed_move;
+	}
+	else if (cube->tab_key[S_KEY] == 1)
+	{
+		if (cube->map->map[(int)(cube->P->px - cube->P->dirX * cube->P->speed_move)][(int)(cube->P->py)] == 0)
+			cube->P->px -= cube->P->dirX * cube->P->speed_move;
+		if (cube->map->map[(int)(cube->P->px)][(int)(cube->P->py - cube->P->dirY * cube->P->speed_move)] == 0)
+			cube->P->py -= cube->P->dirY * cube->P->speed_move;
+	}
+	if (cube->tab_key[A_KEY] == 1)
+	{
+		double oldDirX = cube->P->dirX;
+		cube->P->dirX = cube->P->dirX * cos(cube->P->speed_rotate) - cube->P->dirY * sin(cube->P->speed_rotate);
+		cube->P->dirY = oldDirX * sin(cube->P->speed_rotate) + cube->P->dirY * cos(cube->P->speed_rotate);
+		double oldPlaneX = cube->cam->planeX;
+		cube->cam->planeX = cube->cam->planeX * cos(cube->P->speed_rotate) - cube->cam->planeY * sin(cube->P->speed_rotate);
+		cube->cam->planeY = oldPlaneX * sin(cube->P->speed_rotate) + cube->cam->planeY * cos(cube->P->speed_rotate);
+	}
+	else if (cube->tab_key[D_KEY] == 1)
+	{
+		double oldDirX = cube->P->dirX;
+		cube->P->dirX = cube->P->dirX * cos(-cube->P->speed_rotate) - cube->P->dirY * sin(-cube->P->speed_rotate);
+		cube->P->dirY = oldDirX * sin(-cube->P->speed_rotate) + cube->P->dirY * cos(-cube->P->speed_rotate);
+		double oldPlaneX = cube->cam->planeX;
+		cube->cam->planeX = cube->cam->planeX * cos(-cube->P->speed_rotate) - cube->cam->planeY * sin(-cube->P->speed_rotate);
+		cube->cam->planeY = oldPlaneX * sin(-cube->P->speed_rotate) + cube->cam->planeY * cos(-cube->P->speed_rotate);
+	}
+	put_wall(&cube);
 }
 
-int	key_control(t_cube *cube)
+int	key_press(int key, void *param)
 {
-	printf("hey\n");
-	mlx_key_hook(cube->img->win, key_press, cube);
+	t_cube *cube;
+
+	cube = (t_cube *)param;
+	if (key > 256)
+		return (0);
+	if (cube->tab_key[key] == 0)
+		cube->tab_key[key] = 1;
+	else if (cube->tab_key[key] == 1)
+		cube->tab_key[key] = 0;
+	return (0);
+}
+
+int key_release(int key, void *param)
+{
+	t_cube *cube;
+
+	cube = (t_cube *)param;
+	if (key == S_KEY)
+	{
+		cube->tab_key[0] = 0;
+	}
 	return (0);
 }
 
 int	current_loop(t_cube *cube)
 {
+	set_parm(cube);
 	mlx_put_image_to_window(cube->img->mlx, cube->img->win, cube->img->img, 0, 0);
 	return (0);
 }
-
+/*
+ *	cree une tableau pour les key et cree une gestion avec mlx_hook 1 si presser 0 si relacher
+ * */
 int	main()
 {
 	t_cube	*cube;
 	cube = init_cube();
-	put_cube(&cube);
+	put_wall(&cube);
 	mlx_hook(cube->img->win, 02, 1L<<0, key_press, cube);
+	mlx_hook(cube->img->win, 03, 1L<<1, key_press, cube);
+	//mlx_hook(cube->img->win, 02, 1L<<0, key_press, cube);
 	//key_control(cube);
 	mlx_loop_hook(cube->img->mlx, current_loop, cube);
 	mlx_loop(cube->img->mlx);

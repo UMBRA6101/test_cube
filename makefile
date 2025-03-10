@@ -17,7 +17,9 @@ DIRLIBFT = ./lib/libft
 SRCDIR = src/
 SRC =           main.c \
 				init.c \
-				utils.c
+				utils.c \
+				raycasting.c \
+				free/clear.c
 
 SRCS = $(addprefix $(SRCDIR), $(SRC))
 
