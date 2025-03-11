@@ -16,7 +16,7 @@
 
 /*----init*--------*/
 t_cube  *init_cube();
-t_fc	*init_fc(t_cube *cube);
+t_fc	init_fc(t_cube *cube);
 
 /*----utils--------*/
 void	reset_buff(int	**buff);
@@ -30,5 +30,6 @@ void ft_put_pixel(t_img *img, int x, int y, unsigned int color);
 
 /*----free---------*/
 void	clear_dubl_buff(int **buff);
+void	ft_exit(t_cube *cube, int exit_value);
 
 #endif

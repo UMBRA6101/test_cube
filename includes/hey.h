@@ -13,5 +13,6 @@
 # define A_KEY 97
 # define S_KEY 115
 # define D_KEY 100
+# define ESC_KEY 65307
 
 #endif //CUBE3D_HEY_H

@@ -19,7 +19,8 @@ SRC =           main.c \
 				init.c \
 				utils.c \
 				raycasting.c \
-				free/clear.c
+				free/clear.c \
+				free/exit.c
 
 SRCS = $(addprefix $(SRCDIR), $(SRC))
 

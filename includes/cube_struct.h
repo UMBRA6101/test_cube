@@ -3,29 +3,7 @@ typedef struct	s_map
 	int	**map;
 	int	mapX;
 	int	mapY;
-	int	mapS;
 }				t_map;
-
-typedef struct	s_wall
-{
-	double	sideDistX;
-	double	sideDistY;
-	double	deltaDistX;
-	double	deltaDistY;
-	double	perWallDist;
-	double	texPos;
-	double	step;
-	double	wallX;
-	int texX;
-	int texY;
-	int	texNum;
-	int StepX;
-	int StepY;
-	int side;
-	int lineHeight;
-	int drawStart;
-	int drawEnd;
-}				t_wall;
 
 typedef struct	s_texture
 {
@@ -59,21 +37,38 @@ typedef struct	s_fc
 	t_texture	*tex;
 }				t_fc;
 
+typedef struct	s_wall
+{
+	double	sideDistX;
+	double	sideDistY;
+	double	deltaDistX;
+	double	deltaDistY;
+	double	perWallDist;
+	double	texPos;
+	double	step;
+	double	wallX;
+	int texX;
+	int texY;
+	int	texNum;
+	int StepX;
+	int StepY;
+	int side;
+	int lineHeight;
+	int drawStart;
+	int drawEnd;
+}				t_wall;
+
 typedef struct	s_img
 {
 	void		*mlx;
 	void		*win;
 	void		*img;
 	char		*addr;
-	int			x;
-	int			y;
 	int			endian;
 	int			line_lenght;
 	int			bits_per_pixel;
 	int			**texture_pixel;
-	t_texture 	*tex;
 	char		*tex_pix_addr;
-	t_map		map;
 }				t_img;
 
 typedef struct	s_camera
@@ -101,15 +96,12 @@ typedef struct	s_player
 typedef struct	s_cube
 {
 	int	*tab_key;
+	int	mouse_x;
+	int	mouse_y;
 	t_img *img;
+	t_texture *tex;
 	t_map	*map;
 	t_wall	*w;
 	t_player	*P;
 	t_camera	*cam;
 }				t_cube;
-
-typedef struct	s_point
-{
-	int	x;
-	int	y;
-}				t_point;

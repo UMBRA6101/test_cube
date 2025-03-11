@@ -2,7 +2,7 @@
 
 int put_floor_ceiling(t_cube **cube)
 {
-	t_fc *fc;
+	t_fc fc;
 	int	tx;
 	int ty;
 	int p;
@@ -11,29 +11,29 @@ int put_floor_ceiling(t_cube **cube)
 	fc = init_fc((*cube));
 	for (int y = 0; y < SCREEN_HEIGHT; y++)
 	{
-		fc->rayDirX0 = (float)((*cube)->P->dirX - (*cube)->cam->planeX);
-		fc->rayDirY0 = (float)((*cube)->P->dirY - (*cube)->cam->planeY);
-		fc->rayDirX1 = (float)((*cube)->P->dirX + (*cube)->cam->planeX);
-		fc->rayDirY1 = (float)((*cube)->P->dirY + (*cube)->cam->planeY);
+		fc.rayDirX0 = (float)((*cube)->P->dirX - (*cube)->cam->planeX);
+		fc.rayDirY0 = (float)((*cube)->P->dirY - (*cube)->cam->planeY);
+		fc.rayDirX1 = (float)((*cube)->P->dirX + (*cube)->cam->planeX);
+		fc.rayDirY1 = (float)((*cube)->P->dirY + (*cube)->cam->planeY);
 		p = y - SCREEN_HEIGHT / 2;
-		fc->posZ = (float)0.5 * SCREEN_HEIGHT;
-		fc->rowDistance = fc->posZ / (float)(p);
-		fc->floorStepX = fc->rowDistance * (fc->rayDirX1 - fc->rayDirX0) / SCREEN_WIDTH;
-		fc->floorStepY = fc->rowDistance * (fc->rayDirY1 - fc->rayDirY0) / SCREEN_WIDTH;
-		fc->floorX = (*cube)->P->px + fc->rowDistance * fc->rayDirX0;
-		fc->floorY = (*cube)->P->py + fc->rowDistance * fc->rayDirY0;
+		fc.posZ = (float)0.5 * SCREEN_HEIGHT;
+		fc.rowDistance = fc.posZ / (float)(p);
+		fc.floorStepX = fc.rowDistance * (fc.rayDirX1 - fc.rayDirX0) / SCREEN_WIDTH + (*cube)->P->pitch;
+		fc.floorStepY = fc.rowDistance * (fc.rayDirY1 - fc.rayDirY0) / SCREEN_WIDTH + (*cube)->P->pitch;
+		fc.floorX = (*cube)->P->px + fc.rowDistance * fc.rayDirX0;
+		fc.floorY = (*cube)->P->py + fc.rowDistance * fc.rayDirY0;
 		for (int x = 0;x < SCREEN_WIDTH; x++)
 		{
-			fc->cellX = (int)(fc->floorX);
-			fc->cellY = (int)(fc->floorY);
-			tx = (int)(fc->tex->width * (fc->floorX - fc->cellX)) & (fc->tex->width - 1);
-			ty = (int)(fc->tex->height * (fc->floorY - fc->cellY)) & (fc->tex->height - 1);
-			fc->floorX += fc->floorStepX;
-			fc->floorY += fc->floorStepY;
+			fc.cellX = (int)(fc.floorX);
+			fc.cellY = (int)(fc.floorY);
+			tx = (int)((*cube)->tex[4].width * (fc.floorX - fc.cellX)) & ((*cube)->tex[4].width - 1);
+			ty = (int)((*cube)->tex[4].height * (fc.floorY - fc.cellY)) & ((*cube)->tex[4].height - 1);
+			fc.floorX += fc.floorStepX;
+			fc.floorY += fc.floorStepY;
 			/*int	checkerBoardPattern = (int)(fc->cellX + fc->cellY) & 1;
 			if (checkerBoardPattern == 0) fc->floorTexture = 3;
 			else fc->floorTexture = 4*/
-			color = fc->tex->addr[fc->tex->width * ty + tx];
+			color = (*cube)->tex[4].addr[(*cube)->tex[4].width * ty + tx];
 			color = (color >> 1) & 8355711;
 			(*cube)->img->texture_pixel[y][x] = color;
 			(*cube)->img->texture_pixel[SCREEN_HEIGHT - y - 1][x] = color;
@@ -42,11 +42,8 @@ int put_floor_ceiling(t_cube **cube)
 	return (0);
 }
 
-t_wall *init_wall()
+void init_wall(t_wall *wall)
 {
-	t_wall *wall;
-
-	wall = ft_calloc(sizeof(t_wall), 1);
 	wall->sideDistX = 0;
 	wall->sideDistY = 0;
 	wall->deltaDistX = 0;
@@ -58,7 +55,6 @@ t_wall *init_wall()
 	wall->lineHeight = 0;
 	wall->drawStart = 0;
 	wall->drawEnd = 0;
-	return (wall);
 }
 
 void	ft_dda(t_cube **cube)
@@ -141,10 +137,10 @@ void	ft_chose_and_set_tex(t_cube **cube)
 	else
 		(*cube)->w->wallX = (*cube)->P->px + (*cube)->w->perWallDist * (*cube)->cam->rayDirX;
 	(*cube)->w->wallX -= floor((*cube)->w->wallX);
-	(*cube)->w->texX = (int)((*cube)->w->wallX * (double)(*cube)->img->tex[(*cube)->w->side].width);
-	if ((*cube)->w->side == 0 && (*cube)->cam->rayDirX > 0) (*cube)->w->texX = (*cube)->img->tex[(*cube)->w->side].width - (*cube)->w->texX - 1;
-	if ((*cube)->w->side == 1 && (*cube)->cam->rayDirY < 0) (*cube)->w->texX = (*cube)->img->tex[(*cube)->w->side].width - (*cube)->w->texX - 1;
-	(*cube)->w->step = 1.0 * (*cube)->img->tex[(*cube)->w->side].height / (*cube)->w->lineHeight;
+	(*cube)->w->texX = (int)((*cube)->w->wallX * (double)(*cube)->tex[(*cube)->w->side].width);
+	if ((*cube)->w->side == 0 && (*cube)->cam->rayDirX > 0) (*cube)->w->texX = (*cube)->tex[(*cube)->w->side].width - (*cube)->w->texX - 1;
+	if ((*cube)->w->side == 1 && (*cube)->cam->rayDirY < 0) (*cube)->w->texX = (*cube)->tex[(*cube)->w->side].width - (*cube)->w->texX - 1;
+	(*cube)->w->step = 1.0 * (*cube)->tex[(*cube)->w->side].height / (*cube)->w->lineHeight;
 	(*cube)->w->texPos = ((*cube)->w->drawStart - (*cube)->P->pitch - (double)SCREEN_HEIGHT / 2 + (double)((*cube)->w->lineHeight) / 2) * (*cube)->w->step;
 }
 
@@ -156,9 +152,9 @@ void	ft_change_pix(t_cube **cube, const int x)
 	y = (*cube)->w->drawStart;
 	while (y < (*cube)->w->drawEnd)
 	{
-		(*cube)->w->texY = (int)(*cube)->w->texPos & ((*cube)->img->tex[(*cube)->w->side].height - 1);
+		(*cube)->w->texY = (int)(*cube)->w->texPos & ((*cube)->tex[(*cube)->w->side].height - 1);
 		(*cube)->w->texPos += (*cube)->w->step;
-		color = (*cube)->img->tex[(*cube)->w->side].addr[(((*cube)->img->tex[(*cube)->w->side].width) * (*cube)->w->texY + (*cube)->w->texX)];
+		color = (*cube)->tex[(*cube)->w->side].addr[(((*cube)->tex[(*cube)->w->side].width) * (*cube)->w->texY + (*cube)->w->texX)];
 		if ((*cube)->w->side == 1) color = (color >> 1) & 8355711;
 		if (color > 0)
 			(*cube)->img->texture_pixel[y][x] = color;
@@ -191,11 +187,8 @@ int	put_wall(t_cube **cube)
 	int x;
 
 	x = 0;
+	init_wall((*cube)->w);
 	put_floor_ceiling(cube);
-	(*cube)->w = init_wall();
-	(*cube)->img->img = mlx_new_image((*cube)->img->mlx, SCREEN_WIDTH, SCREEN_HEIGHT);
-	(*cube)->img->addr = mlx_get_data_addr((*cube)->img->img, &((*cube)->img->bits_per_pixel),
-			&((*cube)->img->line_lenght), &((*cube)->img->endian));
 	while (x < SCREEN_WIDTH)
 	{
 		set_dda(cube, x);
@@ -206,6 +199,6 @@ int	put_wall(t_cube **cube)
 		x++;
 	}
 	ft_cast_pix(cube);
-	mlx_put_image_to_window((*cube)->img->mlx, (*cube)->img->win, (*cube)->img->img, 0, 0);
+	//mlx_put_image_to_window((*cube)->img->mlx, (*cube)->img->win, (*cube)->img->img, 0, 0);
 	return (0);
 }

@@ -47,24 +47,38 @@ static int *test(void *mlx, t_texture *tex, char *path)
 	return (buffer);
 }
 
-t_fc	*init_fc(t_cube *cube)
+t_fc	init_fc(t_cube *cube)
 {
-	t_fc *fc;
+	t_fc fc;
 
-	fc = (t_fc *)ft_calloc(sizeof(t_fc), 1);
-	fc->tex = ft_calloc(sizeof(t_texture), 1);
-	fc->tex->addr = test(cube->img->mlx, fc->tex, "./tex/wood.xpm");
+//	fc = (t_fc *)ft_calloc(sizeof(t_fc), 1);
+	//fc->tex = cube->tex;
+	(void)cube;
+	fc.rayDirX0 = 0;
+	fc.rayDirY0 = 0;
+	fc.rayDirX1 = 0;
+	fc.rayDirY1 = 0;
+	fc.posZ = 0;
+	fc.rowDistance = 0;
+	fc.floorStepX = 0;
+	fc.floorStepY = 0;
+	fc.floorTexture = 0;
+	fc.floorX = 0;
+	fc.floorY = 0;
+	fc.cellX = 0;
+	fc.cellY = 0;
+	fc.tx = 0;
+	fc.ty = 0;
+	fc.celingTexture = 0;
 	return (fc);
 }
 
 static t_texture *init_tex(void	*mlx)
 {
 	t_texture	*tex;
-	int			i;
 
-	i = 0;
 	tex = NULL;
-	if (!(tex = (t_texture *)ft_calloc(sizeof(t_texture), 5)))
+	if (!(tex = (t_texture *)ft_calloc(sizeof(t_texture), 6)))
 		return (NULL);
 	/*tex[0].tex = mlx_xpm_file_to_image(mlx, "./tex/north.xpm", &(tex[0].width), &(tex[0].height));
 	tex[1].tex = mlx_xpm_file_to_image(mlx, "./tex/greystone.xpm", &(tex[1].width), &(tex[1].height));
@@ -79,6 +93,7 @@ static t_texture *init_tex(void	*mlx)
 	tex[1].addr = test(mlx, &tex[1], "./tex/greystone.xpm");
 	tex[2].addr = test(mlx, &tex[2], "./tex/mossy.xpm");
 	tex[3].addr = test(mlx, &tex[3], "./tex/redbrick.xpm");
+	tex[4].addr = test(mlx, &tex[4], "./tex/wood.xpm");
 	return (tex);
 }
 
@@ -108,7 +123,6 @@ static t_img	*init_img()
 		return (NULL);
 	img->mlx = mlx_init();
 	img->win = mlx_new_window(img->mlx, SCREEN_WIDTH, SCREEN_HEIGHT, "cube3D");
-	img->tex = init_tex(img->mlx);
 	img->texture_pixel = ft_calloc(SCREEN_HEIGHT + 1, sizeof(int *));
 	while (i < SCREEN_HEIGHT)
 		img->texture_pixel[i++] = ft_calloc(SCREEN_WIDTH + 1, sizeof(int));
@@ -172,7 +186,11 @@ t_cube	*init_cube()
 		return (NULL);
 	if (!(cube->img = init_img()))
 		return (NULL);
+	if (!(cube->tex = init_tex(cube->img->mlx)))
+		return (NULL);
 	if (!(cube->P = init_play()))
+		return (NULL);
+	if (!(cube->w = ft_calloc(sizeof(t_wall), 1)))
 		return (NULL);
 	return (cube);
 }
